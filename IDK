@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10121c">
+  <meta name="description" content="اختار بصراحة — لعبة خفيفة تساعدكم تفتحوا حوارًا صريحًا وبكل راحة.">
+  <title>اختار بصراحة — لعبة حوار خفيفة</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #10121c;
+      --panel: rgba(27, 30, 45, .88);
+      --panel-soft: rgba(255, 255, 255, .045);
+      --ink: #f8f7fb;
+      --muted: #b2b3c2;
+      --subtle: #85889b;
+      --line: rgba(255, 255, 255, .105);
+      --purple: #a995ff;
+      --pink: #fa91bd;
+      --mint: #9de6cc;
+      --shadow: 0 28px 90px rgba(0, 0, 0, .38);
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100svh;
+      padding: 26px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+      isolation: isolate;
+      background:
+        radial-gradient(ellipse at 84% 8%, rgba(125, 91, 202, .2), transparent 34rem),
+        radial-gradient(ellipse at 7% 93%, rgba(63, 167, 145, .12), transparent 30rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
+    }
+
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      z-index: -1;
+      width: 310px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: .18;
+      pointer-events: none;
+    }
+    body::before { background: #8868ed; top: -190px; left: -130px; }
+    body::after { background: #4fc4a4; bottom: -220px; right: -160px; }
+
+    button { font: inherit; }
+    button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
+    [hidden] { display: none !important; }
+
+    .app {
+      width: min(100%, 590px);
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 30px;
+      padding: clamp(22px, 5vw, 42px);
+      background: linear-gradient(145deg, rgba(31, 34, 51, .94), rgba(22, 24, 37, .96));
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, .07);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 12%;
+      width: 42%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--purple), var(--pink), transparent);
+      opacity: .85;
+    }
+
+    .brand-row, .meta-row, .actions, .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 750;
+      letter-spacing: -.2px;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(169, 149, 255, .34);
+      border-radius: 12px;
+      background: linear-gradient(145deg, rgba(169, 149, 255, .2), rgba(250, 145, 189, .12));
+      color: #d1c6ff;
+    }
+
+    .brand-mark svg { width: 19px; height: 19px; }
+
+    .privacy-pill, .step-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, .035);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .privacy-pill svg { width: 14px; height: 14px; color: var(--mint); }
+    .intro-content { padding-top: clamp(38px, 8vw, 62px); }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #c7bbff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--pink);
+      box-shadow: 0 0 14px rgba(250, 145, 189, .7);
+    }
+
+    h1, h2, p { margin-top: 0; }
+    h1 {
+      max-width: 470px;
+      margin-bottom: 14px;
+      padding-top: 16px;
+      font-size: clamp(38px, 9vw, 60px);
+      line-height: 1.17;
+      letter-spacing: -1.8px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(95deg, #d1c6ff 5%, #f6a8d0 58%, #a4e9d2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead {
+      max-width: 440px;
+      margin-bottom: 26px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.9;
+    }
+
+    .feature-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin: 0 0 28px;
+    }
+
+    .feature {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 9px 11px;
+      color: #d6d5e0;
+      background: var(--panel-soft);
+      font-size: 12px;
+    }
+
+    .feature svg { width: 15px; height: 15px; color: var(--mint); }
+
+    .primary, .secondary, .back-button {
+      min-height: 50px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+
+    .primary {
+      width: 100%;
+      border: 0;
+      padding: 13px 18px;
+      color: #171421;
+      background: linear-gradient(105deg, #c5b8ff, #f3a4cb 68%, #ffc3aa);
+      box-shadow: 0 10px 26px rgba(169, 149, 255, .17);
+      font-weight: 800;
+    }
+
+    .primary:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(169, 149, 255, .25); }
+    .primary:active, .secondary:active, .back-button:active, .choice:active { transform: scale(.99); }
+
+    .secondary {
+      width: 100%;
+      padding: 12px 17px;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      background: rgba(255, 255, 255, .045);
+      font-weight: 700;
+    }
+
+    .secondary:hover, .back-button:hover { border-color: rgba(201, 190, 255, .44); background: rgba(255, 255, 255, .075); }
+
+    .privacy-note {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin: 13px 0 0;
+      color: var(--subtle);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .privacy-note svg { width: 14px; height: 14px; flex: none; }
+
+    .game-content, .finish-content { padding-top: 31px; }
+    .meta-row { margin-bottom: 12px; }
+    .step-pill { color: #ded9f7; border-color: rgba(169, 149, 255, .18); }
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      margin-bottom: 28px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--purple), var(--pink), var(--mint));
+      transition: width .35s ease;
+    }
+
+    .question-kicker {
+      margin-bottom: 9px;
+      color: var(--subtle);
+      font-size: 12px;
+    }
+
+    .question-title {
+      margin-bottom: 22px;
+      font-size: clamp(23px, 5.8vw, 30px);
+      line-height: 1.55;
+      letter-spacing: -.5px;
+    }
+
+    .choices { display: grid; gap: 11px; }
+
+    .choice {
+      width: 100%;
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 13px 15px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      color: #eeedf4;
+      background: rgba(255, 255, 255, .035);
+      text-align: right;
+      cursor: pointer;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .choice:hover {
+      transform: translateY(-1px);
+      border-color: rgba(201, 190, 255, .43);
+      background: rgba(169, 149, 255, .075);
+    }
+
+    .choice.selected {
+      border-color: rgba(169, 149, 255, .78);
+      background: linear-gradient(105deg, rgba(169, 149, 255, .16), rgba(250, 145, 189, .08));
+      box-shadow: inset 0 0 0 1px rgba(169, 149, 255, .12);
+    }
+
+    .choice-marker {
+      width: 23px;
+      height: 23px;
+      flex: 0 0 23px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .2);
+      border-radius: 50%;
+      color: transparent;
+      font-size: 13px;
+      font-weight: 900;
+      transition: .18s ease;
+    }
+
+    .choice.selected .choice-marker {
+      border-color: transparent;
+      color: #171421;
+      background: linear-gradient(135deg, #c5b8ff, #f3a4cb);
+    }
+
+    .choice-copy { font-size: 15px; line-height: 1.65; }
+    .actions { margin-top: 22px; }
+    .back-button {
+      min-width: 98px;
+      padding: 11px 15px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(255, 255, 255, .025);
+      font-weight: 650;
+    }
+
+    .actions .primary { width: auto; min-width: 142px; flex: 1; }
+    .action-spacer { flex: 1; }
+    .tip {
+      margin: 18px 0 0;
+      color: var(--subtle);
+      font-size: 12px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .finish-content h2 {
+      margin: 8px 0 10px;
+      font-size: clamp(25px, 6vw, 34px);
+      line-height: 1.5;
+    }
+
+    .finish-content > p {
+      margin-bottom: 22px;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    .result-card {
+      margin-top: 18px;
+      padding: 19px;
+      border: 1px solid rgba(157, 230, 204, .24);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(157, 230, 204, .09), rgba(169, 149, 255, .07));
+    }
+
+    .result-label { margin-bottom: 6px; color: var(--mint); font-size: 12px; font-weight: 700; }
+    .result-value { margin: 0 0 8px; font-size: 23px; font-weight: 800; line-height: 1.5; }
+    .result-message { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    .result-actions { display: grid; gap: 9px; margin-top: 17px; }
+
+    .footer {
+      width: min(100%, 590px);
+      padding: 16px 6px 0;
+      color: #7e8192;
+      font-size: 11px;
+    }
+    .footer span:last-child { color: #a09daf; }
+    .footer strong { color: #c7c2d4; font-weight: 650; }
+
+    .fade-in { animation: fade-in .32s ease both; }
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(7px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 14px 12px 12px; }
+      .app { border-radius: 24px; padding: 21px 19px 23px; }
+      .brand { font-size: 13px; }
+      .brand-mark { width: 33px; height: 33px; }
+      .privacy-pill { padding: 7px 9px; font-size: 11px; }
+      .intro-content { padding-top: 38px; }
+      .lead { font-size: 15px; }
+      .feature { font-size: 11px; padding: 8px 9px; }
+      .footer { padding-inline: 3px; font-size: 10px; }
+      .choice { min-height: 58px; padding: 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" aria-label="لعبة اختار بصراحة">
+    <header class="brand-row">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 20s-7-4.35-7-10a4 4 0 0 1 7-2.65A4 4 0 0 1 19 10c0 5.65-7 10-7 10Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.5 12h2l1.2-2.2 1.5 4.4 1.1-2.2h1.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>اختار بصراحة</span>
+      </div>
+      <span class="privacy-pill">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M10 2.5 4 5v4.3c0 3.7 2.55 6.45 6 8.2 3.45-1.75 6-4.5 6-8.2V5l-6-2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="m7.5 9.8 1.6 1.6 3.5-3.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        على جهازك فقط
+      </span>
+    </header>
+
+    <section id="intro" class="intro-content fade-in">
+      <div class="eyebrow">أسئلة خفيفة، وإجابات على راحتك</div>
+      <h1>مرات سؤال واحد<br><span class="gradient-text">يفتح حكاية.</span></h1>
+      <p class="lead">جاوبوا على كم سؤال بكل عفوية، وبعدها اختاروا بصراحة شنوّة تحبّوا تكون العلاقة. ما فماش إجابة صحيحة أو غالطة.</p>
+      <div class="feature-row" aria-label="مميزات اللعبة">
+        <span class="feature">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2.5 4 5v4.3c0 3.7 2.55 6.45 6 8.2 3.45-1.75 6-4.5 6-8.2V5l-6-2.5Z" stroke="currentColor" stroke-width="1.5"/><path d="m7.5 9.8 1.6 1.6 3.5-3.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          إجاباتك ما تتبعتش
+        </span>
+        <span class="feature">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          ٥ أسئلة سريعة
+        </span>
+        <span class="feature">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 17s-6-3.8-6-8.5a3.5 3.5 0 0 1 6-2.35 3.5 3.5 0 0 1 6 2.35C16 13.2 10 17 10 17Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          على راحتكم وبلا ضغط
+        </span>
+      </div>
+      <button class="primary" id="start" type="button">يلا نبدأ <span aria-hidden="true">←</span></button>
+      <p class="privacy-note">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6.5 8V6.5a3.5 3.5 0 1 1 7 0V8M5 8h10v8.5H5V8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 11v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        إجاباتك تبقى في هالجهاز، وما تتخزّنش في أي سيرفر.
+      </p>
+    </section>
+
+    <section id="game" class="game-content" hidden aria-live="polite">
+      <div class="meta-row">
+        <span class="step-pill" id="counter">السؤال ١ من ٥</span>
+        <span class="step-pill">اختار إجابة</span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="تقدّم الأسئلة" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+        <div class="progress-bar" id="bar"></div>
+      </div>
+      <p class="question-kicker" id="questionKicker">سؤال خفيف للتعارف</p>
+      <h2 class="question-title" id="question" tabindex="-1"></h2>
+      <div class="choices" id="choices" role="group" aria-label="الإجابات المتاحة"></div>
+      <div class="actions">
+        <button class="back-button" id="back" type="button" hidden>→ السابق</button>
+        <span class="action-spacer" id="spacer"></span>
+        <button class="primary" id="next" type="button" disabled>التالي <span aria-hidden="true">←</span></button>
+      </div>
+      <p class="tip">اختار اللي يشبهك — وتقدر تغيّر إجابتك قبل ما تكمل.</p>
+    </section>
+
+    <section id="finish" class="finish-content" hidden>
+      <div class="eyebrow">آخر خطوة، وعلى راحتك</div>
+      <h2 tabindex="-1" id="finishTitle">شنوّة تحبّوا تكون العلاقة؟</h2>
+      <p>اختار اللي يناسبك بصراحة. ما يلزمكش توافق على حاجة موش مرتاح لها.</p>
+      <div class="choices" id="relationship" role="group" aria-label="اختار نوع العلاقة">
+        <button class="choice" type="button" data-result="أصدقاء فقط">
+          <span class="choice-marker" aria-hidden="true">✓</span><span class="choice-copy">أصدقاء فقط</span>
+        </button>
+        <button class="choice" type="button" data-result="نتعرّفوا على بعضنا أكثر">
+          <span class="choice-marker" aria-hidden="true">✓</span><span class="choice-copy">نتعرّفوا على بعضنا أكثر</span>
+        </button>
+        <button class="choice" type="button" data-result="ممكن أكثر من أصدقاء">
+          <span class="choice-marker" aria-hidden="true">✓</span><span class="choice-copy">ممكن أكثر من أصدقاء</span>
+        </button>
+        <button class="choice" type="button" data-result="مازلت موش متأكد">
+          <span class="choice-marker" aria-hidden="true">✓</span><span class="choice-copy">مازلت موش متأكد</span>
+        </button>
+      </div>
+      <div class="result-card" id="result" hidden aria-live="polite">
+        <p class="result-label">اختيارك</p>
+        <p class="result-value" id="resultText"></p>
+        <p class="result-message">شكراً على صراحتك. الأهم إنّ الطرفين يكونوا مرتاحين وواضحين مع بعضهم.</p>
+        <div class="result-actions">
+          <button class="primary" id="share" type="button">شارك اختيارك</button>
+          <button class="secondary" id="restart" type="button">عاود اللعبة من الأول</button>
+        </div>
+      </div>
+      <button class="back-button" id="backToQuestions" type="button" style="margin-top:18px">→ راجع الأسئلة</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>لعبة خفيفة لحوار أصدق</span>
+    <span>© <span id="year"></span> <strong>MOUADH</strong> — جميع الحقوق محفوظة</span>
+  </footer>
+
+  <script>
+    const questions = [
+      {
+        q: "كيفاش تحب تقضي وقتك مع شخص ترتاح له؟",
+        a: ["نحكيوا ونضحكوا كأصدقاء", "نتعرّفوا على بعضنا أكثر", "نشوفوا إذا بيناتنا اهتمام خاص"]
+      },
+      {
+        q: "قدّاش يهمّك التواصل بيناتكم؟",
+        a: ["من وقت لوقت، عادي", "نحكيوا بانتظام", "نحب تواصل أكثر واهتمام متبادل"]
+      },
+      {
+        q: "إذا الشخص ما جاوبكش بسرعة، شنوّة تعمل؟",
+        a: ["عادي، كل واحد عنده ظروفه", "نستنى ونحكي معاه بعد", "نسأله إذا كل شيء لاباس"]
+      },
+      {
+        q: "شنوّة أهم حاجة بالنسبة ليك؟",
+        a: ["الصداقة والضحك", "الثقة والتفاهم", "الاهتمام والوضوح في المشاعر"]
+      },
+      {
+        q: "إذا حسّيت إنّ الشخص يحب يتقرّب منك أكثر؟",
+        a: ["نفضّل نبقاو أصدقاء", "نحب نتعرّفوا أكثر بشويّة", "نكون منفتح على أكثر من صداقة إذا الطرفين موافقين"]
+      }
+    ];
+
+    const arabicDigits = value => String(value).replace(/\d/g, digit => "٠١٢٣٤٥٦٧٨٩"[digit]);
+    const intro = document.getElementById("intro");
+    const game = document.getElementById("game");
+    const finish = document.getElementById("finish");
+    const questionTitle = document.getElementById("question");
+    const choices = document.getElementById("choices");
+    const nextButton = document.getElementById("next");
+    const backButton = document.getElementById("back");
+    const progress = document.querySelector(".progress-track");
+    const progressBar = document.getElementById("bar");
+    const relationshipChoices = [...document.querySelectorAll("#relationship .choice")];
+    let index = 0;
+    const answers = Array(questions.length).fill(null);
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function showSection(section) {
+      [intro, game, finish].forEach(item => { item.hidden = item !== section; });
+      section.classList.remove("fade-in");
+      void section.offsetWidth;
+      section.classList.add("fade-in");
+    }
+
+    function renderQuestion(moveFocus = false) {
+      const item = questions[index];
+      const digits = arabicDigits(index + 1);
+      document.getElementById("counter").textContent = `السؤال ${digits} من ${arabicDigits(questions.length)}`;
+      questionTitle.textContent = item.q;
+      progressBar.style.width = `${((index + 1) / questions.length) * 100}%`;
+      progress.setAttribute("aria-valuenow", String(index + 1));
+      backButton.hidden = index === 0;
+      document.getElementById("spacer").hidden = index !== 0;
+      nextButton.disabled = answers[index] === null;
+      nextButton.innerHTML = index === questions.length - 1
+        ? 'كمّل <span aria-hidden="true">←</span>'
+        : 'التالي <span aria-hidden="true">←</span>';
+
+      choices.replaceChildren();
+      item.a.forEach((answer, answerIndex) => {
+        const button = document.createElement("button");
+        const selected = answers[index] === answerIndex;
+        button.type = "button";
+        button.className = `choice${selected ? " selected" : ""}`;
+        button.setAttribute("aria-pressed", String(selected));
+        button.innerHTML = '<span class="choice-marker" aria-hidden="true">✓</span>';
+        const copy = document.createElement("span");
+        copy.className = "choice-copy";
+        copy.textContent = answer;
+        button.append(copy);
+        button.addEventListener("click", () => {
+          answers[index] = answerIndex;
+          [...choices.children].forEach((choice, i) => {
+            const isSelected = i === answerIndex;
+            choice.classList.toggle("selected", isSelected);
+            choice.setAttribute("aria-pressed", String(isSelected));
+          });
+          nextButton.disabled = false;
+        });
+        choices.append(button);
+      });
+
+      if (moveFocus) questionTitle.focus();
+    }
+
+    document.getElementById("start").addEventListener("click", () => {
+      index = 0;
+      showSection(game);
+      renderQuestion(true);
+    });
+
+    backButton.addEventListener("click", () => {
+      if (index > 0) {
+        index -= 1;
+        renderQuestion(true);
+      }
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (answers[index] === null) return;
+      if (index < questions.length - 1) {
+        index += 1;
+        renderQuestion(true);
+      } else {
+        showSection(finish);
+        document.getElementById("finishTitle").focus();
+      }
+    });
+
+    relationshipChoices.forEach(button => {
+      button.addEventListener("click", () => {
+        relationshipChoices.forEach(choice => {
+          const selected = choice === button;
+          choice.classList.toggle("selected", selected);
+          choice.setAttribute("aria-pressed", String(selected));
+        });
+        document.getElementById("resultText").textContent = button.dataset.result;
+        document.getElementById("result").hidden = false;
+        document.getElementById("result").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+    });
+
+    document.getElementById("backToQuestions").addEventListener("click", () => {
+      index = questions.length - 1;
+      showSection(game);
+      renderQuestion(true);
+    });
+
+    document.getElementById("share").addEventListener("click", async event => {
+      const text = `لعبت لعبة «اختار بصراحة» — اختياري: ${document.getElementById("resultText").textContent}`;
+      const button = event.currentTarget;
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: "اختار بصراحة", text });
+        } catch (error) {
+          if (error.name !== "AbortError") copyResult(text, button);
+        }
+      } else {
+        copyResult(text, button);
+      }
+    });
+
+    async function copyResult(text, button) {
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = "تم نسخ اختيارك ✓";
+      } catch (error) {
+        window.prompt("انسخ اختيارك من هنا:", text);
+      }
+    }
+
+    document.getElementById("restart").addEventListener("click", () => {
+      index = 0;
+      answers.fill(null);
+      relationshipChoices.forEach(choice => {
+        choice.classList.remove("selected");
+        choice.setAttribute("aria-pressed", "false");
+      });
+      document.getElementById("result").hidden = true;
+      document.getElementById("share").textContent = "شارك اختيارك";
+      showSection(intro);
+      document.getElementById("start").focus();
+    });
+  </script>
+</body>
+</html>
